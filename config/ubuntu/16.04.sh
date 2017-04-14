@@ -33,5 +33,5 @@ chmod +x initctl_faker
 rm -fr /sbin/initctl
 ln -s /initctl_faker /sbin/initctl
 
-
-
+#Install inventory file
+echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
