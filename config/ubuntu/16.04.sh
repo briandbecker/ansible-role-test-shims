@@ -34,4 +34,5 @@ rm -fr /sbin/initctl
 ln -s /initctl_faker /sbin/initctl
 
 #Install inventory file
-echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
+echo "[local]" > /etc/ansible/hosts
+echo "localhost ansible_connection=local" >> /etc/ansible/hosts
