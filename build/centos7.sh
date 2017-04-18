@@ -38,6 +38,5 @@ fi
 sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
 
 #Install inventory file
-mkdir /etc/ansible
 echo -e "[local]" > /etc/ansible/hosts
 echo -e "localhost ansible_connection=local" >> /etc/ansible/hosts
