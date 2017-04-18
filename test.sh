@@ -28,6 +28,7 @@ cleanup=${cleanup:-"true"}
 container_id=${container_id:-$timestamp}
 ansible_version=${ansible_version:-"latest"}
 
+build_script="$repo/build/$distro.sh"
 
 ## Set up vars for Docker setup.
 # Ubuntu 16.04
@@ -35,7 +36,11 @@ if [ $distro = 'ubuntu1604' ]; then
   docker="ubuntu:16.04"
   init="/lib/systemd/systemd"
   opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  config_script="$repo/config/ubuntu/16.04.sh"
+# CentOS 7
+elif [ $distro = 'centos7' ]; then
+  docker="centos:7"
+  init="/usr/lib/systemd/systemd"
+  opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 else
   exit 1
 fi
@@ -46,12 +51,12 @@ docker run --detach --volume="$PWD":/etc/ansible/roles/role_under_test:rw --name
 
 printf "\n"
 
-printf ${green}"Fetch config script from: $config_script"${neutral}"\n"
-wget -O /tmp/config.sh $config_script
-docker cp /tmp/config.sh $container_id:/config.sh
-rm -f /tmp/config.sh
-docker exec --tty $container_id env TERM=xterm chmod +x /config.sh
-docker exec --tty $container_id env TERM=xterm ansible_version=$ansible_version ./config.sh
+printf ${green}"Fetch build  script from: $build_script"${neutral}"\n"
+wget -O /tmp/build.sh $build_script
+docker cp /tmp/build.sh $container_id:/build.sh
+rm -f /tmp/build.sh
+docker exec --tty $container_id env TERM=xterm chmod +x /build.sh
+docker exec --tty $container_id env TERM=xterm ansible_version=$ansible_version ./build.sh
 
 # Install requirements if `requirements.yml` is present.
 if [ -f "$PWD/tests/requirements.yml" ]; then

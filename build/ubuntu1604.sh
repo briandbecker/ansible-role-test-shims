@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: [OPTIONS] ./16.04.sh
+# Usage: [OPTIONS] ./ubuntu1604.sh
 #  - ansible_version: the ansible version to be installed
 
 # Exit on any individual command failure.
