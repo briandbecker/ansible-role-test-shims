@@ -21,7 +21,9 @@ rm -f /lib/systemd/system/anaconda.target.wants/*
 
 yum makecache fast
 yum -y install deltarpm epel-release initscripts openssl-devel gcc
+yum clean all
 yum -y install python-devel python-pip sudo which
+yum clean all
 yum -y update
 
 pip -q install --upgrade pip
