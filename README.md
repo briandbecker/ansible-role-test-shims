@@ -17,4 +17,28 @@ So why didn't I fork his docker container repos?
 * I didn't want to manage a bunch of simple docker container repos
 
 But this is slower...
-* Yes, it is admitedly slower to run though the build scripts on each test 
+* Yes, it is admitedly slower to run though the build scripts on each test and wanted the challenge.
+
+# Requirements
+
+1. Docker
+
+# How to use
+
+Run the test.sh file from within your ansible role. By default this will run the test/test.yml playbook on ubuntu 16.04 with the latest version of ansible.
+
+```
+my-ansible-role> ../ansible-role-test-shims/test.sh
+```
+
+You can pass in different playbooks to run.
+
+```
+my-ansible-role> env playbook=other_test.yml ../ansible-role-test-shims/test.sh
+```
+
+You can tell it not to cleanup the docker container when the test finishes.  This is helpful if you want to run additional tests on the container such as testing a connection to a service.  You will need to set the container_id so you can reference it in later tests.
+
+```
+my-ansible-role> env cleanup=false container_id=12345 ../ansible-role-test-shims/test.sh
+```
