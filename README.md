@@ -17,7 +17,7 @@ So why didn't I fork his docker container repos?
 * I didn't want to manage a bunch of simple docker container repos
 
 But this is slower...
-* Yes, it is admitedly slower to run though the build scripts on each test and wanted the challenge.
+* Yes, it is admitedly slower to run though the build scripts on each test run but I have more control. I also partly did this just for the challenge.
 
 # Requirements
 
@@ -41,4 +41,31 @@ You can tell it not to cleanup the docker container when the test finishes.  Thi
 
 ```
 my-ansible-role> env cleanup=false container_id=12345 ../ansible-role-test-shims/test.sh
+```
+
+# How to use with Travis
+
+Put this in the .travis.yml
+
+```
+---
+services:
+  - docker
+
+env:
+  matrix:
+    - DISTRO="ubuntu1604" PLAYBOOK="test.yml" ANSIBLE_VERSION="2.2.0"
+    - DISTRO="ubuntu1604" PLAYBOOK="test.yml" ANSIBLE_VERSION="latest"
+    - DISTRO="centos7" PLAYBOOK="test.yml" ANSIBLE_VERSION="2.2.0"
+    - DISTRO="centos7" PLAYBOOK="test.yml" ANSIBLE_VERSION="latest"
+
+script:
+
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://raw.githubusercontent.com/briandbecker/ansible-role-test-shims/master/test.sh
+  - chmod +x ${PWD}/tests/test.sh
+
+  # Run tests.
+  - env distro=$DISTRO ansible_version=$ANSIBLE_VERSION playbook=$PLAYBOOK ${PWD}/tests/test.sh
+
 ```
